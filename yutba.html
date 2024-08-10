@@ -5,8 +5,42 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Yut</title>
+        <script src="https://pixijs.download/v8.3.2/pixi.min.js"></script>
     </head>
     <body>
         <h1>Yut x Blue Archive (Doujin game) (Beta)</h1>
+
+        <script type="module">
+            //Creating an Application
+            const app = new PIXI.Application();
+            await app.init({ width: 640, height: 360 });
+
+            //Adding the Canvas to the DOM
+            document.body.appendChild(app.canvas);
+
+            // load the PNG asynchronously
+            await PIXI.Assets.load('https://pixijs.com/assets/bunny.png');
+            let sprite = PIXI.Sprite.from('https://pixijs.com/assets/bunny.png');
+
+            //Adding the Sprite to the Stage
+            app.stage.addChild(sprite);
+
+            //Writing an Update Loop
+            // Add a variable to count up the seconds our demo has been running
+            let elapsed = 0.0;
+            // Tell our application's ticker to run a new callback every frame, passing
+            // in the amount of time that has passed since the last tick
+            app.ticker.add((ticker) => {
+                // Add the time to our total elapsed time
+                elapsed += ticker.deltaTime;
+                // Update the sprite's X position based on the cosine of our elapsed time.  We divide
+                // by 50 to slow the animation down a bit...
+                sprite.x = 100.0 + Math.cos(elapsed/50.0)**3 * 100.0;
+                sprite.y = 100.0 + Math.sin(elapsed/50.0)**3 * 100.0;
+            });
+
+
+
+        </script>
     </body>
 </html>
