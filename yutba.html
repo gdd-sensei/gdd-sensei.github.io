@@ -4,43 +4,63 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Yut</title>
-        <script src="https://pixijs.download/v8.3.2/pixi.min.js"></script>
+        <title>Yut x Blue Archive (Doujin game) (Beta)</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.80.1/phaser.js"></script>
+        <style>
+            body {
+                padding: 0;
+                margin: 0;
+                overflow: hidden;
+            }
+        </style>
     </head>
     <body>
-        <h1>Yut x Blue Archive (Doujin game) (Beta)</h1>
+        <script>
+            class Example extends Phaser.Scene
+            {
+                preload ()
+                {
+                    this.load.setBaseURL('https://labs.phaser.io');
 
-        <script type="module">
-            //Creating an Application
-            const app = new PIXI.Application();
-            await app.init({ width: 640, height: 360 });
+                    this.load.image('sky', 'assets/skies/space3.png');
+                    this.load.image('logo', 'assets/sprites/phaser3-logo.png');
+                    this.load.image('red', 'assets/particles/red.png');
+                }
 
-            //Adding the Canvas to the DOM
-            document.body.appendChild(app.canvas);
+                create ()
+                {
+                    this.add.image(400, 300, 'sky');
 
-            // load the PNG asynchronously
-            await PIXI.Assets.load('https://pixijs.com/assets/bunny.png');
-            let sprite = PIXI.Sprite.from('https://pixijs.com/assets/bunny.png');
+                    const particles = this.add.particles(0, 0, 'red', {
+                        speed: 100,
+                        scale: { start: 1, end: 0 },
+                        blendMode: 'ADD'
+                    });
 
-            //Adding the Sprite to the Stage
-            app.stage.addChild(sprite);
+                    const logo = this.physics.add.image(400, 100, 'logo');
 
-            //Writing an Update Loop
-            // Add a variable to count up the seconds our demo has been running
-            let elapsed = 0.0;
-            // Tell our application's ticker to run a new callback every frame, passing
-            // in the amount of time that has passed since the last tick
-            app.ticker.add((ticker) => {
-                // Add the time to our total elapsed time
-                elapsed += ticker.deltaTime;
-                // Update the sprite's X position based on the cosine of our elapsed time.  We divide
-                // by 50 to slow the animation down a bit...
-                sprite.x = 100.0 + Math.cos(elapsed/50.0)**3 * 100.0;
-                sprite.y = 100.0 + Math.sin(elapsed/50.0)**3 * 100.0;
-            });
+                    logo.setVelocity(100, 200);
+                    logo.setBounce(1, 1);
+                    logo.setCollideWorldBounds(true);
 
+                    particles.startFollow(logo);
+                }
+            }
 
+            const config = {
+                type: Phaser.AUTO,
+                width: 800,
+                height: 600,
+                scene: Example,
+                physics: {
+                    default: 'arcade',
+                    arcade: {
+                        gravity: { y: 200 }
+                    }
+                }
+            };
 
-        </script>
+            const game = new Phaser.Game(config);
+        </script>        
     </body>
 </html>
